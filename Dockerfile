@@ -24,8 +24,15 @@ RUN ./b2 \
     toolset=emscripten \
     variant=release \
     threading=single \
+    # Had to read the sources for this one. 
+    # Emscripten inherits options from GCC: https://github.com/boostorg/build/blob/b9d218b24f508dfd27e996c63181d8bfe4516bcf/src/tools/emscripten.jam#L45
+    # Which defines archiveflags here: https://github.com/boostorg/build/blob/b9d218b24f508dfd27e996c63181d8bfe4516bcf/src/tools/gcc.jam#L1068
+    # Undocumented? https://www.boost.org/doc/libs/1_77_0/tools/build/doc/html/index.html
+    archiveflags="-r" \
+    # Find other libraries with `./b2 --show-libraries`.
     --with-filesystem \
     --with-system \
+    # --with-test \
     install
 
 COPY . /src
